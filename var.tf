@@ -1,7 +1,7 @@
 #var.tf
 locals {
-	bucket_name = "example-bucket"
-	cluster_name = "example-cluster"
+	bucket_name = "unique-bucket-name-ihopethisisdifferent"
+	cluster_name = "example-cluster-name"
 	image_id = "ami-0277155c3f0ab2930"
 	instance_type = "t2.micro"
   min_size = 2

@@ -88,3 +88,9 @@ resource "aws_iam_role_policy_attachment" "s3_role_attachment" {
   policy_arn = aws_iam_policy.s3_access_policy.arn
   role       = aws_iam_role.s3_role.name
 }
+
+#Create instance profile to use iam_role
+resource "aws_iam_instance_profile" "s3_profile" {
+  name = "${var.bucket_name}-access-profile"
+  role = aws_iam_role.s3_role.name
+}

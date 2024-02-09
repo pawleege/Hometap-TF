@@ -51,6 +51,9 @@ resource "aws_launch_template" "example_instance" {
   image_id      = "${var.image_id}"
   instance_type   = "${var.instance_type}"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
+  iam_instance_profile {
+    arn = var.s3_profile_arn
+  }
 }
 
 # Create an Autoscaling Group
@@ -59,7 +62,6 @@ resource "aws_autoscaling_group" "example_service" {
   health_check_type    = "EC2"
   min_size = "${var.min_size}"
   max_size = "${var.max_size}"
-  service_linked_role_arn = "${var.s3_role_arn}"
   
   launch_template {
     id = "${aws_launch_template.example_instance.id}"
@@ -72,38 +74,17 @@ resource "aws_autoscaling_group" "example_service" {
   }
 }
 
-# Create Autoscaling_Policy for scale_out
-resource "aws_autoscaling_policy" "scale_out" {
+# Create Autoscaling_Policy to maintain
+resource "aws_autoscaling_policy" "maintain_cpu" {
   name = "${var.cluster_name}_asgpolicy_scaleout"
-  scaling_adjustment = 1
   adjustment_type    = "ChangeInCapacity"
-  cooldown           = 300
-  policy_type        = "SimpleScaling"
+  policy_type        = "TargetTrackingScaling"
   autoscaling_group_name = aws_autoscaling_group.example_service.name
-  metric_aggregation_type = "Average"
 
   target_tracking_configuration {
     predefined_metric_specification {
       predefined_metric_type = "ASGAverageCPUUtilization"
     }
-    target_value = 70
-  }
-}
-
-# Create Autoscaling_Policy for scale_in
-resource "aws_autoscaling_policy" "scale_in" {
-  name = "${var.cluster_name}_asgpolicy_scalein"
-  scaling_adjustment = -1
-  adjustment_type    = "ChangeInCapacity"
-  cooldown           = 300
-  policy_type        = "SimpleScaling"
-  autoscaling_group_name = aws_autoscaling_group.example_service.name
-  metric_aggregation_type = "Average"
-
-  target_tracking_configuration {
-    predefined_metric_specification {
-      predefined_metric_type = "ASGAverageCPUUtilization"
-    }
-    target_value = 30
+    target_value = 50
   }
 }

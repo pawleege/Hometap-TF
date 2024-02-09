@@ -1,7 +1,8 @@
 #main.tf
 provider "aws" {
   region = "us-east-1"
-  shared_credentials_files = ["C:/Users/nerd6/.aws/credentials"]
+  #Change this path to where your aws credentials are
+  shared_credentials_files = ["C:/Path/To/.aws/credentials"]
 }
 
 #Setup S3 bucket for logging
@@ -29,5 +30,5 @@ module "webserver_cluster" {
   min_size = local.min_size
   max_size = local.max_size
   
-  s3_role_arn = module.s3_iam_module.s3_role_arn
+  s3_profile_arn = module.s3_iam_module.s3_profile_arn
 }
