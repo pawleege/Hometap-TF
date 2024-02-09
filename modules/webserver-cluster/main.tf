@@ -55,11 +55,11 @@ resource "aws_launch_template" "example_instance" {
 
 # Create an Autoscaling Group
 resource "aws_autoscaling_group" "example_service" {
-  availability_zones   = ["${data.aws_availability_zones.available.names}"]
+  availability_zones   = data.aws_availability_zones.available.names
   health_check_type    = "EC2"
   min_size = "${var.min_size}"
   max_size = "${var.max_size}"
-  service_linked_role_arn = module.s3_iam_module.s3_role_arn
+  service_linked_role_arn = "${var.s3_role_arn}"
   
   launch_template {
     id = "${aws_launch_template.example_instance.id}"
@@ -78,7 +78,6 @@ resource "aws_autoscaling_policy" "scale_out" {
   scaling_adjustment = 1
   adjustment_type    = "ChangeInCapacity"
   cooldown           = 300
-  scaling_adjustment_type = "PercentChangeInCapacity"
   policy_type        = "SimpleScaling"
   autoscaling_group_name = aws_autoscaling_group.example_service.name
   metric_aggregation_type = "Average"
@@ -97,7 +96,6 @@ resource "aws_autoscaling_policy" "scale_in" {
   scaling_adjustment = -1
   adjustment_type    = "ChangeInCapacity"
   cooldown           = 300
-  scaling_adjustment_type = "PercentChangeInCapacity"
   policy_type        = "SimpleScaling"
   autoscaling_group_name = aws_autoscaling_group.example_service.name
   metric_aggregation_type = "Average"
