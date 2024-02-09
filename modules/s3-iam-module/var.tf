@@ -9,3 +9,8 @@ variable "role_name" {
   description = "The name of the iam role to access the S3 bucket"
   type        = string
 }
+
+variable "log_bucket" {
+  description = "The S3 bucket used for logging"
+  type        = string
+}

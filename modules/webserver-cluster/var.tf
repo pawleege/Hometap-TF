@@ -1,4 +1,4 @@
-# webserver_cluster/var.tf
+# modules/webserver-cluster/var.tf
 variable "s3_role_arn" {
   description = "S3 IAM Role ARN"
   type        = string

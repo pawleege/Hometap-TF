@@ -1,4 +1,4 @@
-# webserver_cluster/main.tf
+# modules/webserver-cluster/main.tf
 
 # Get Available AZs
 data "aws_availability_zones" "available" {

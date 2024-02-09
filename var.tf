@@ -1,3 +1,4 @@
+#var.tf
 locals {
 	bucket_name = "example-bucket"
 	cluster_name = "example-cluster"
